@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Available Materials</title></head>
+<body>
+    <h2>Available Materials</h2>
+    <ul>
+    {% for m in materials %}
+        <li>{{ m['m_title'] }} -
+          <a href="{{ url_for('uploaded_file', filename=m['file_path'].split('/')[-1]) }}">Download</a>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

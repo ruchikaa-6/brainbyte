@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Course Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f9fafc;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 100px auto;
+    }
+.card {
+  border-radius: 1.2rem;
+  box-shadow: 0 12px 40px rgba(106, 13, 173, 0.75); /* Strong dark purple */
+  padding: 40px;
+  background: #fff;
+  transition: 0.3s;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 55px rgba(106, 13, 173, 0.9); /* Very deep purple on hover */
+}
+    .card h2 {
+      font-weight: 700;
+      color: #333;
+    }
+    .progress {
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+    .btn {
+      border-radius: 0.5rem;
+      padding: 10px 22px;
+      font-weight: 500;
+    }
+    .instructions {
+      background: #f9f9f9;
+      border-left: 5px solid #6a0dad;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+    .instructions h5 {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #6a0dad;
+    }
+    .question-card {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    .navbar-custom {
+      background: linear-gradient(45deg, #6A0DAD, #764ba2);
+    }
+    .navbar-brand {
+      font-weight: 600;
+      color: #fff !important;
+    }
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      margin-left: 15px;
+    }
+    .navbar-nav .nav-link:hover {
+      text-decoration: underline;
+    }
+    .navbar-nav a:hover {
+            color: #ffd700;
+        }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <div class="container d-flex align-items-center justify-content-between">
+    
+    <!-- Left Side: Logo + Links -->
+    <div class="d-flex align-items-center">
+      <!-- Logo -->
+      <img src="{{ url_for('static', filename='images/BrainByte.png') }}" 
+           alt="BrainByte Logo" width="150" class="me-4"> <!-- space between logo & home -->
+</div>
+      <!-- Links -->
+      <ul class="navbar-nav d-flex flex-row">
+        <li class="nav-item me-2"><a class="nav-link" href="{{ url_for('student_home') }}">Home</a></li>
+        <li class="nav-item me-2"><a class="nav-link" href="{{ url_for('view_course', course_id=course_id) }}">Back</a></li>
+        <li class="nav-item me-2"><a class="nav-link" href="{{ url_for('logout') }}">Logout&nbsp&nbsp;</a></li>
+    <div class="d-flex align-items-center">
+      <img src="{{ url_for('static', filename='images/ok.jpg') }}" 
+           alt="Profile" 
+           style="width:40px; height:40px; border-radius:50%; margin-right:8px;">
+      <span style="color:white; font-size:14px; font-weight:500;">
+        Welcome, {{ session['username'] }}
+      </span>
+    </div>
+    </ul>
+</div>
+
+</nav>
+<div class="quiz-container">
+  <div class="card">
+    <h2 class="mb-4 text-center">Course Quiz</h2>
+    <div class="instructions">
+      <h5>📌 Instructions</h5>
+      <ul>
+        <li>Read each question carefully before answering.</li>
+        <li>You must select one option for every question.</li>
+        <li>You can move back and forth between questions using <b>Next</b> and <b>Previous</b>.</li>
+        <li>The progress bar at the top shows your current position.</li>
+        <li>Once finished, click <b>Submit Quiz</b> to see your result.</li>
+      </ul>
+    </div>
+    <div class="progress mb-4">
+      <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%;">
+        Question 1
+      </div>
+    </div>
+    <form method="POST" id="quizForm">
+      {% for q in questions %}
+      <div class="question-card" id="q{{ loop.index }}">
+        <h5 class="mb-3">{{ loop.index }}. {{ q['question'] }}</h5>
+        {% for i in range(1,5) %}
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="{{ q['qid'] }}" value="{{ i }}" required>
+            <label class="form-check-label">{{ q['option' ~ i] }}</label>
+          </div>
+        {% endfor %}
+        <div class="mt-4 d-flex justify-content-between">
+          {% if not loop.first %}
+          <button type="button" class="btn btn-outline-secondary prevBtn">Previous</button>
+          {% else %}
+          <div></div>
+          {% endif %}
+          {% if not loop.last %}
+          <button type="button" class="btn btn-primary nextBtn">Next</button>
+          {% else %}
+          <button type="submit" class="btn btn-warning text-dark fw-bold"> Submit</button>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </form>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let current = 0;
+    const questions = document.querySelectorAll(".question-card");
+    const progressBar = document.getElementById("progressBar");
+    function updateProgress() {
+      const percent = ((current + 1) / questions.length) * 100;
+      progressBar.style.width = percent + "%";
+      progressBar.textContent = "Question " + (current + 1) + " of " + questions.length;
+    }
+    function showQuestion(index) {
+      questions.forEach((q, i) => {
+        q.style.display = (i === index) ? "block" : "none";
+      });
+      updateProgress();
+    }
+    document.querySelectorAll(".nextBtn").forEach((btn, index) => {
+      btn.addEventListener("click", function () {
+        if (index + 1 < questions.length) {
+          current = index + 1;
+          showQuestion(current);
+        }
+      });
+    });
+    document.querySelectorAll(".prevBtn").forEach((btn, index) => {
+      btn.addEventListener("click", function () {
+        if (index >= 0) {
+          current = index;
+          showQuestion(current);
+        }
+      });
+    });
+    showQuestion(current);
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

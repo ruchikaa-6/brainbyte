@@ -1,0 +1,242 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>Quiz Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f9fafc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #6a0dad, #9b4dca);
+            padding: 12px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .navbar-left img {
+            height: 40px;
+        }
+        .navbar-left a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .navbar-left a:hover {
+            color: #ffd700;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            font-weight: 500;
+        }
+        .navbar-right a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .navbar-right a:hover {
+            color: #ffd700;
+        }
+
+        /* MAIN RESULT CONTAINER */
+        .result-container {
+            background: #fff;
+            padding: 25px;
+            max-width: 900px;
+            margin: 40px auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(106, 13, 173, 0.5);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #222;
+            font-weight: 700;
+        }
+        p {
+            text-align: center;
+            font-size: 18px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th {
+            background: #6a0dad;
+            color: white;
+            text-align: center;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        .correct {
+            background-color: #c8e6c9;
+        }
+        .wrong {
+            background-color: #ffcdd2;
+        }
+        .feedback {
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 500px;
+        }
+        .excellent { background: #c8e6c9; color: #2e7d32; }
+        .good { background: #fff9c4; color: #f57f17; }
+        .poor { background: #ffcdd2; color: #b71c1c; }
+        .chart-container {
+            width: 350px;
+            margin: 25px auto;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #6a0dad;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: #4b007d;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <!-- Logo on the left -->
+    <div class="navbar-left">
+        <img src="{{ url_for('static', filename='images/BrainByte.png') }}" 
+             alt="BrainByte Logo" width="150" class="me-4">
+    </div>
+
+    <!-- Links on the right -->
+    <div class="navbar-right">
+        <a href="{{ url_for('student_home') }}">Home</a>
+        <a href="{{ url_for('view_course', course_id=course_id) }}">Back</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+          <img src="{{ url_for('static', filename='images/ok.jpg') }}" 
+           alt="Profile" 
+           style="width:40px; height:40px; border-radius:50%; margin-right:8px;">
+        <span fw-bold>Welcome {{ session['username'] }}</span>
+    </div>
+</div>
+
+
+<!-- RESULT -->
+<div class="result-container">
+    <h1>Quiz Result</h1>
+    <p><strong>Score:</strong> {{ score }} / {{ total }}</p>
+
+    <!-- Feedback -->
+    {% set percentage = (score / total) * 100 %}
+    {% if percentage >= 80 %}
+        <div class="feedback excellent">🌟 Excellent work! Keep it up.</div>
+    {% elif percentage >= 50 %}
+        <div class="feedback good">👍 Good effort! Practice a little more.</div>
+    {% else %}
+        <div class="feedback poor">📘 Don’t worry, review the material and try again.</div>
+    {% endif %}
+
+    <!-- Chart -->
+    <div class="chart-container">
+        <canvas id="resultChart"></canvas>
+    </div>
+
+    <h2>Question Breakdown</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Your Answer</th>
+                <th>Correct Answer</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for r in results %}
+            <tr class="{% if r.is_correct %}correct{% else %}wrong{% endif %}">
+                <td>{{ r.question }}</td>
+                <td>
+                    {% if r.selected %}
+                        {{ r.options[r.selected|int - 1] }}
+                    {% else %}
+                        No Answer
+                    {% endif %}
+                </td>
+                <td>{{ r.options[r.correct|int - 1] }}</td>
+                <td>
+                    {% if r.is_correct %}
+                        ✅ Correct
+                    {% else %}
+                        ❌ Wrong
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Chart Script -->
+<script>
+    const ctx = document.getElementById('resultChart');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Correct', 'Wrong'],
+            datasets: [{
+                data: [{{ score }}, {{ total - score }}],
+                backgroundColor: ['#4CAF50', '#F44336'],
+                borderColor: ['#388E3C', '#B71C1C'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

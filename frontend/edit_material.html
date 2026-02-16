@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Material</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4 bg-light">
+
+  <div class="container">
+    <h3>Edit Material</h3>
+    <form action="{{ url_for('edit_material', material_id=material[0]) }}" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" name="m_title" class="form-control" value="{{ material[2] }}" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Replace File (optional)</label>
+        <input type="file" name="file" class="form-control">
+      </div>
+      <button class="btn btn-primary">Save Changes</button>
+      <a href="{{ request.referrer }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+
+</body>
+</html>

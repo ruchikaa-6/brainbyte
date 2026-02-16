@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      background: #f9fafc;
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, #6A0DAD, #9b30ff);
+      color: white;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+    }
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .sidebar img {
+  width: 190px;
+  height: auto;   /* aspect ratio safe रहेगा */
+  margin-bottom: 1rem;
+}
+    .student-profile {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .student-profile img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-bottom: 0.5rem;
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.7rem 1rem;
+      margin: 0.3rem 0;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+    .sidebar a i {
+      font-size: 16px;
+    }
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(5px);
+    }
+    .logout-btn {
+      font-size: 15px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .logout-btn:hover {
+      background: #c82333 !important;
+    }
+
+    /* Main */
+    main {
+      padding: 2rem;
+    }
+    h3 {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #6A0DAD;
+    }
+
+    /* Search */
+    .search-box {
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      padding-left: 40px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .search-wrapper i {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    /* Course Cards */
+    .course-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .course-card .btn {
+      background: linear-gradient(90deg, #ffb400, #ff9500);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .course-card .btn:hover {
+      opacity: 0.9;
+    }
+    .btn-secondary {
+    background: linear-gradient(90deg, #ffb400, #ff9500) !important;
+    color: #fff !important;
+    border: none;
+    border-radius: 30px;
+    font-weight: 500;
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+    background: linear-gradient(90deg, #ff9500, #ffb400) !important;
+    transform: scale(1.05);
+}
+
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <aside class="col-md-2 sidebar">
+        <div>
+          <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='images/BrainByte.png') }}" alt="BrainByte Logo">
+            <h6>Dashboard</h6>
+          </div>
+          <div class="student-profile">
+            <img src="{{ url_for('static', filename='images/ok.jpg') }}" alt="Student Avatar">
+            <h6 class="mb-0">{{ student_name}}</h6>
+            <small>Welcome Student!</small>
+          </div>
+          <a href="/studenthome"><i class="fa-solid fa-book"></i> Courses</a>
+          <a href="#searchBox" id="searchLink"><i class="fa-solid fa-magnifying-glass"></i> Search</a>
+          <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+        </div>
+        <a href="/logout" class="btn btn-danger w-100 logout-btn mt-3"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="col-md-10">
+        <form method="GET" class="d-flex mb-4">
+          <div class="search-wrapper w-100 me-2">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" class="form-control search-box" 
+                   id="searchBox" placeholder="Search courses..." 
+                   value="{{ request.args.get('search', '') }}">
+          </div>
+          <button type="submit" class="btn btn-primary px-4">Search</button>
+        </form>
+
+        <h3>Available Courses</h3>
+        <div class="row g-4">
+          {% for course in courseslist %}
+            {% if not request.args.get('search') or request.args.get('search').lower() in course['title'].lower() %}
+              <div class="col-md-4">
+                <div class="card course-card h-100">
+                  <div class="card-body">
+                    <h5 class="fw-bold">{{ course['title'] }}</h5>
+                    <p class="text-muted">{{ course['description'] or 'No description available.' }}</p>
+                    <a href="/course/{{ course['course_id'] }}" 
+                       class="btn w-100">View Course</a>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="col-12">
+              <div class="alert alert-warning text-center">
+                ⚠️ No courses found.
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

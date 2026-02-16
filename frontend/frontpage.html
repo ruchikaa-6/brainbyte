@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrainByte | Empower Education</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      scroll-behavior: smooth;
+    }
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #6A0dad, #8E24AA);
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: #FFEB3B !important;
+    }
+    .navbar .btn {
+      border-radius: 6px;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      background: url("{{ url_for('static', filename='images/l.png') }}") center/cover no-repeat; 
+      color: white;
+      text-align: center;
+      padding: 150px 20px;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(106, 27, 154, 0.75);
+    }
+    .hero .content {
+      position: relative;
+      z-index: 1;
+    }
+    .hero h1 {
+      font-size: 56px;
+      font-weight: bold;
+      color: #FFEB3B;
+    }
+    .hero p {
+      font-size: 20px;
+      margin-top: 15px;
+    }
+
+    /* Features / Services */
+    .features .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .features .card:hover { transform: translateY(-8px); }
+
+    /* Skills */
+    .skills {
+      background: #f8f9fa;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .skills .icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    /* About */
+    .about {
+      background: url("{{ url_for('static', filename='images/t.jpg') }}") center/cover no-repeat;
+      color: white;
+      padding: 80px 20px;
+      position: relative;
+    }
+    .about::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .about .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Testimonials */
+    .testimonial {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* CTA */
+    .cta {
+      background: url("{{ url_for('static', filename='images/o.png') }}") center/cover no-repeat;
+      position: relative;
+      padding: 100px 20px;
+      color: white;
+      text-align: center;
+    }
+    .cta::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(56,142,60,0.8);
+    }
+    .cta .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Footer */
+    footer {
+      background: #0b0d17;
+      color: #ccc;
+      padding: 40px 20px;
+    }
+    footer a { color: #ccc; text-decoration: none; }
+    footer a:hover { color: white; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container">
+    <img src="{{ url_for('static', filename='images/BrainByte.png') }}" alt="BrainByte Logo" width="150">
+
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navmenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+      </ul>
+      <div class="ms-3">
+        <a href="/login" class="btn btn-outline-light btn-sm">Login</a>
+        <a href="/register" class="btn btn-warning btn-sm ms-2">Register</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="content" data-aos="fade-up">
+    <h1>Empower Education with Ease</h1>
+    <p>An LMS for All Your Teaching and Learning Needs</p>
+    <a href="#features" class="btn btn-success btn-lg mt-4">🚀 Get Started</a>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features container my-5" id="features">
+  <h3 class="text-center fw-bold mb-4" data-aos="fade-up">Our Features</h3>
+  <p class="text-center mb-5">Everything you need for effective online learning and skill development</p>
+  <div class="row g-4">
+    <div class="col-md-4" data-aos="zoom-in">
+      <div class="card text-center p-4">
+        <i class="bi bi-collection fs-1 text-primary"></i>
+        <h5 class="mt-3">Free Courses</h5>
+        <p>Access a wide range of IT courses without paying anything.</p>
+      </div>
+    </div>
+    <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+      <div class="card text-center p-4">
+        <i class="bi bi-file-earmark-pdf-fill fs-1 text-danger"></i>
+        <h5 class="mt-3">Offline PDFs</h5>
+        <p>Download course materials and learn anytime, anywhere.</p>
+      </div>
+    </div>
+    <div class="col-md-4" data-aos="zoom-in" data-aos-delay="400">
+      <div class="card text-center p-4">
+        <i class="bi bi-question-circle-fill fs-1 text-success"></i>
+        <h5 class="mt-3">Interactive Quizzes</h5>
+        <p>Test your knowledge with quizzes and track your progress.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section class="skills" id="skills">
+  <h3 class="fw-bold mb-4" data-aos="fade-up">All the skills you need in one place.</h3>
+  <p class="mb-5">Master the most in-demand technologies and programming languages</p>
+  <div class="icons">
+    <div><i class="bi bi-circle-fill text-primary"></i> Python</div>
+    <div><i class="bi bi-circle-fill text-warning"></i> Java</div>
+    <div><i class="bi bi-circle-fill text-danger"></i> C++</div>
+    <div><i class="bi bi-circle-fill text-success"></i> MongoDB</div>
+    <div><i class="bi bi-circle-fill text-info"></i> JavaScript</div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="container text-center" data-aos="fade-up">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h5 class="fw-bold">About Us</h5>
+        <p>Our learning platform has empowered over 100,000 students worldwide by delivering quality education accessible to everyone.</p>
+      </div>
+      <div class="col-md-4">
+        <h5 class="fw-bold">Why Choose Us?</h5>
+        <p>We offer flexible learning for busy students and professionals, with courses designed by industry experts.</p>
+      </div>
+      <div class="col-md-4">
+        <h5 class="fw-bold">Technology Enabled</h5>
+        <p>Our platform combines technology and personalized learning paths to enhance your experience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="container my-5" id="testimonials">
+  <h3 class="text-center fw-bold mb-5" data-aos="fade-up" style="color:#6A1B9A;">What Our Users Say</h3>
+  <div class="row g-4">
+    <div class="col-md-6" data-aos="fade-right">
+      <div class="testimonial">
+        <i class="bi bi-quote fs-2 text-primary"></i>
+        <p>"BrainByte made managing my classroom so easy! Uploading materials and creating quizzes is effortless."</p>
+        <strong>- Teacher A</strong>
+      </div>
+    </div>
+    <div class="col-md-6" data-aos="fade-left">
+      <div class="testimonial">
+        <i class="bi bi-quote fs-2 text-primary"></i>
+        <p>"I love how I can track my progress and access everything from one place. It makes learning fun!"</p>
+        <strong>- Student B</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container" data-aos="zoom-in">
+    <h2 class="fw-bold">Ready to Start Your Learning Journey?</h2>
+    <p>Join thousands of students who are already advancing their careers with our comprehensive courses</p>
+    <a href="#" class="btn btn-warning btn-lg">Get Started Free</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container d-flex justify-content-between flex-wrap">
+    <div>
+      <h6 class="fw-bold">BrainByte</h6>
+      <p>Empowering learners worldwide with comprehensive, interactive, and free education.</p>
+    </div>
+    <div>
+      <h6 class="fw-bold">Courses</h6>
+      <ul class="list-unstyled">
+        <li><a href="#">Programming</a></li>
+        <li><a href="#">Data Science</a></li>
+        <li><a href="#">Web Development</a></li>
+        <li><a href="#">Computer Networks</a></li>
+        <li><a href="#">Operating Systems</a></li>
+      </ul>
+    </div>
+    <div>
+      <h6 class="fw-bold">Resources</h6>
+      <ul class="list-unstyled">
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+    </div>
+    <div>
+      <h6 class="fw-bold">Follow Us</h6>
+      <a href="#"><i class="bi bi-twitter me-2"></i></a>
+      <a href="#"><i class="bi bi-facebook me-2"></i></a>
+      <a href="#"><i class="bi bi-linkedin"></i></a>
+    </div>
+  </div>
+  <div class="text-center mt-4">&copy; 2025 BrainByte. All Rights Reserved.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>AOS.init({ duration: 1000, once: true });</script>
+</body>
+</html>

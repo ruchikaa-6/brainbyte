@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - BrainByte</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f5f7fb;
+      font-family: 'Poppins', sans-serif;
+    }
+    #password-instructions {
+    color: blue;
+    font-size: 0.9em;
+    display: none;
+    margin-top: 5px;
+  }
+    .navbar {
+      background: #6a0dad;
+    }
+    .navbar-brand {
+      font-weight: 600;
+      color: #fff !important;
+    }
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      margin-left: 15px;
+    }
+    .navbar-nav .nav-link:hover {
+      text-decoration: underline;
+    }
+    .register-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 90vh;
+    }
+    .register-card {
+      display: flex;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 900px;
+      max-width: 100%;
+    }
+    .register-left {
+      flex: 1;
+      background: #6a0dad;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+    .register-left img {
+      max-width: 250px;
+      margin-bottom: 20px;
+    }
+    .register-right {
+      flex: 1;
+      padding: 40px;
+    }
+    .form-control {
+      margin-bottom: 15px;
+    }
+    .btn-register {
+      width: 100%;
+      background: linear-gradient(to right, #6a0dad, #9b30ff);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .btn-register:hover {
+      opacity: 0.9;
+    }
+    @media (max-width: 768px) {
+      .register-card {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('home') }}">
+        <img src="{{ url_for('static', filename='images/BrainByte.png') }}" alt="BrainByte Logo" width="150">
+      </a>
+      <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Register Section -->
+  <div class="register-container">
+    <div class="register-card">
+      <!-- Left Side -->
+      <div class="register-left">
+        <img src="https://img.icons8.com/clouds/500/student-male.png" alt="Student Illustration">
+        <h2>Join BrainByte Today!</h2>
+        <p>Create your account and start learning with ease.</p>
+      </div>
+
+      <!-- Right Side -->
+      <div class="register-right">
+        <h3 class="mb-4 fw-bold">Create Your Account</h3>
+        <form method="POST" action="{{ url_for('register') }}">
+          Username <input type="text" name="username" class="form-control" placeholder="Enter username" required>
+          Email <input type="email" name="email" class="form-control" placeholder="Enter email" required>
+          Password <input type="password" 
+       name="password" 
+       class="form-control" 
+       placeholder="Enter password" 
+       title="Password must be 6–8 characters long, include at least one uppercase letter, one digit, and one special character."
+         pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?':{}|<>]).{6,8}$"
+       required>
+<div id="password-instructions" style="display:none; color: blue; margin-top:5px;">
+    Password must contain:<br>
+    - At least 1 uppercase letter<br>
+    - At least 1 lowercase letter<br>
+    - At least 1 number<br>
+    - At least 1 special character (!@#$%^&*)<br>
+    - Minimum 8 characters
+  </div>
+          Role <select name="role" class="form-control" required>
+            <option value="Student">Student</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <button type="submit" class="btn-register mt-3">Register</button>
+          {% if msg %}
+  <div class="alert alert-info alert-dismissible fade show" role="alert">
+    {{ msg }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{% endif %}
+        </form>
+        <p class="mt-3 text-center">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+      </div>
+    </div>
+  </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.getElementById('password');
+    const instructions = document.getElementById('password-instructions');
+
+    // Regex: lowercase, uppercase, digit, special char, min 8 chars
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?':{}|<>]).{8,}$/;
+
+    // Show instructions on focus
+    passwordInput.addEventListener('focus', () => {
+        instructions.style.display = 'block';
+    });
+
+    // Hide instructions if valid, show if invalid
+    passwordInput.addEventListener('input', () => {
+        if(passwordRegex.test(passwordInput.value)){
+            instructions.style.display = 'none';
+        } else {
+            instructions.style.display = 'block';
+        }
+    });
+});
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
