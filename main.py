@@ -60,7 +60,7 @@ def register():
 
         # Check for empty fields
         if not username or not email or not password or not user_type:
-            msg = "⚠️ All fields are required!"
+            msg = "All fields are required!"
         else:
             conn = sqlite3.connect("final.db")
             cur = conn.cursor()
@@ -70,7 +70,7 @@ def register():
                     VALUES (?, ?, ?, ?, ?)
                 """, (username, email, password, user_type, reg_date))
                 conn.commit()
-                msg = "✅ Registered successfully! You can now login."
+                msg = "Registered successfully! You can now login."
             except sqlite3.IntegrityError:
                 msg = "Username or Email already exists!"
             finally:
