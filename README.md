@@ -30,7 +30,7 @@ A full-featured **Learning Management System** built with Flask and SQLite, depl
 | Database | SQLite |
 | Frontend | HTML, CSS, Bootstrap 5 |
 | Auth | Flask Sessions |
-| Deployment | Render (free tier) |
+| Deployment | Render |
 | Version Control | Git + GitHub |
 
 ---
