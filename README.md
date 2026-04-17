@@ -97,21 +97,6 @@ Register at `/register` and select your role.
 
 ---
 
-## ☁️ Deployment
-
-Deployed on **Render** (free tier).
-
-> ⚠️ Free instances spin down after inactivity. First load may take ~30 seconds.
-
-To redeploy after changes:
-```bash
-git add .
-git commit -m "your update"
-git push origin main
-```
-
----
-
 ## 📄 License
 
 This project is for educational purposes.
