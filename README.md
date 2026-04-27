@@ -1,4 +1,4 @@
-# 🧠 BrainByte LMS
+#  BrainByte LMS
 
 A full-featured **Learning Management System** built with Flask and SQLite, deployed on Render.
 
@@ -6,7 +6,7 @@ A full-featured **Learning Management System** built with Flask and SQLite, depl
 
 ---
 
-## 📸 Features
+## Features
 
 ### 👨‍💼 Admin
 - Add, edit, and delete courses
@@ -22,7 +22,7 @@ A full-featured **Learning Management System** built with Flask and SQLite, depl
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -35,7 +35,7 @@ A full-featured **Learning Management System** built with Flask and SQLite, depl
 
 ---
 
-## 🚀 Run Locally
+## Run Locally
 
 ### 1. Clone the repository
 ```bash
@@ -60,7 +60,7 @@ http://localhost:5000
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 brainbyte/
@@ -86,7 +86,7 @@ brainbyte/
 
 ---
 
-## 🔐 Roles
+## Roles
 
 | Role | Access |
 |------|--------|
@@ -94,13 +94,3 @@ brainbyte/
 | Student | View courses, take quizzes |
 
 Register at `/register` and select your role.
-
----
-
-## 📄 License
-
-This project is for educational purposes.
-
----
-
-Made with ❤️ by [ruchikaa-6](https://github.com/ruchikaa-6)
